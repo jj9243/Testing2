@@ -72,7 +72,7 @@ public class RecordActivity extends AppCompatActivity {
 
         //timer - 시간 제한 9초.
         value = 0;
-        timer = new CountDownTimer(9000, 880) { // modified 7000 to 9000 (7sec -> 9sec)
+        timer = new CountDownTimer(9000, 900) { // modified 7000 to 9000 (7sec -> 9sec)
             @Override
             public void onTick(long millisUntilFinished) {
                 recordImage.startAnimation(anim);
