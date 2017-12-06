@@ -78,14 +78,24 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="알람 설정 예시\n- 3시간 뒤에 약속\n- 내일 오후 1시 점심 약속"
+        android:layout_centerHorizontal="true"
+        android:text="알람 설정 예시"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        android:id="@+id/textView4"
+        android:layout_above="@+id/textView3"
+        android:layout_marginBottom="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="3시간 뒤에 약속\n내일 오후 1시 점심 약속"
         android:textSize="16dp"
+        android:gravity="center"
         android:id="@+id/textView3"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:layout_marginBottom="13dp" />
 
 </RelativeLayout>
