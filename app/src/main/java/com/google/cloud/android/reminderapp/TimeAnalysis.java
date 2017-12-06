@@ -158,41 +158,57 @@ public class TimeAnalysis {
         if(isNote == true)
             return "note";
 
-        //15분을 뺀 시간으로 적는다.
-        if(calMinute > 15) //분
+        // 예약하려고 하는 시간에서 15분을 빼보고 그 값이 현재 값이랑 같거나, 작으면 15분 적용하는 것을 하지 않는다.
+
+        int temcalMinute = calMinute;
+        int temcalHour = calHour;
+        int temcalDay = calDay;
+        int temcalMonth = calMonth;
+        int temcalYear = calYear;
+
+        //15분을 뺀 시간으로 구해본다.
+        if(temcalMinute > 15) //분
         {
-            calMinute = calMinute - 15;
+            temcalMinute = temcalMinute - 15;
         }
         else
         {
-            calMinute = calMinute - 15 + 60;
-            if(calHour > 0) //시
+            temcalMinute = temcalMinute - 15 + 60;
+            if(temcalHour > 0) //시
             {
-                calHour= calHour - 1;
+                temcalHour= temcalHour - 1;
             }
             else
             {
-                calHour= calHour -1 + 24;
-                if(calDay > 1)//일
+                temcalHour= temcalHour -1 + 24;
+                if(temcalDay > 1)//일
                 {
-                    calDay = calDay -1;
+                    temcalDay = temcalDay -1;
                 }
                 else
                 {
-                    calDay = calDay - 1 + days[calMonth];
-                    if(calMonth > 1) //월
+                    temcalDay = temcalDay - 1 + days[temcalMonth];
+                    if(temcalMonth > 1) //월
                     {
-                        calMonth = calMonth - 1;
+                        temcalMonth = temcalMonth - 1;
                     }
                     else
                     {
-                        calMonth = calMonth -1 + 12;
-                        calYear = calYear - 1;
+                        temcalMonth = temcalMonth -1 + 12;
+                        temcalYear = temcalYear - 1;
                     }
                 }
             }
         }
 
+        //15분 뺀 값이 과거의 값이 아니면
+        if(temcalYear >= curYear && temcalMonth >= curMonth && temcalDay >= curDay && temcalHour >= curHour && temcalMinute > curMinute)
+        {
+            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute ;
+            return temcalTime;
+        }
+
+        //과거의 값이라면
         calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
         System.out.println("extract result2:" + calTime );
 
