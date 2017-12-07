@@ -90,7 +90,7 @@ public class RecTimeActivity extends AppCompatActivity {
 //            textView.setText(timeRegistered + "\n" + recordCutValue(contentValue, 2));
 //            alarmText = timeRegistered + "\n" + recordCutValue(contentValue, 2);
             textView.setText(timeRegistered);
-            textContent.setText(contentValue);
+            textContent.setText(contentValue.replaceAll(" ", ""));
             alarmText = timeRegistered + "\n" + contentValue;
         }
 
