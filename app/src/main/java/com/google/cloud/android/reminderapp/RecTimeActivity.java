@@ -78,8 +78,9 @@ public class RecTimeActivity extends AppCompatActivity {
         int hour = Integer.parseInt(words[3]);
         int minute = Integer.parseInt(words[4]);
         // calendar에 추가한다.
+        ContentAnalysis contentAnalysis = new ContentAnalysis();
         System.out.println("test alarm : " + alarmTime);
-        insertEvent(year, month, day, hour, minute, contentValue);
+        insertEvent(year, month, day, hour, minute, contentAnalysis.Analysis(contentValue));
 
         if (contentValue.equals("")) {
             textView.setText(timeRegistered);
