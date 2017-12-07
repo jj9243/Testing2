@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 //TODO 모든 경우에 대한 regular expression으로 시간표현을 추출하는 방식으로는 버그 발생 시 원인 파악이 힘들고, 새로운 표현 추가 시 기존 표현과 충돌 위험있음. 체계적인 정리 혹은 알고리즘 개선 필요
+
 /**
  * 이 클래스는 음성 녹음 후에 시간 표현을 추출하기 위하여 main activity에서 불러진다.
  * 정규식을 이용하여 음성 파일에서 추출한 텍스트로부터 시간 표현을 추출한다.
@@ -64,7 +65,8 @@ public class TimeAnalysis {
         wMap.put("토요일", 7);
     }
 
-    /** 이 메소드는 초기 시간 값을 설정해주며, extract 메소드를 불러 음성으로 설정하고자 하는 시간 값을 계산하게 된다.
+    /**
+     * 이 메소드는 초기 시간 값을 설정해주며, extract 메소드를 불러 음성으로 설정하고자 하는 시간 값을 계산하게 된다.
      *
      * @param target 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
@@ -97,7 +99,7 @@ public class TimeAnalysis {
         cal.set(Calendar.MONTH, curMonth);
         cal.set(Calendar.DATE, curDay);
 
-        switch (cal.get(Calendar.DAY_OF_WEEK)-1) {
+        switch (cal.get(Calendar.DAY_OF_WEEK) - 1) {
             case 1:
                 curDayOfWeek = "일요일";
                 break;
@@ -127,7 +129,7 @@ public class TimeAnalysis {
             curHour = 0; //0시
         }
 
-        if(curA.equals("오후") && curHour == 12)
+        if (curA.equals("오후") && curHour == 12)
             curHour = 12;
 
         else if (curA.equals("오후")) {
@@ -141,21 +143,21 @@ public class TimeAnalysis {
         calHour = curHour;
         calMinute = curMinute;
 
-        String curTime = curYear + ":" + curMonth + ":" + curDay + ":" + curHour + ":" + curMinute ;
+        String curTime = curYear + ":" + curMonth + ":" + curDay + ":" + curHour + ":" + curMinute;
         //정규식 표현식에서 계산 값 추출
         extractManager(target);
 
         //String calTime = calYear + "년 " + calMonth + "월 " + calDay + "일 " + calHour + "시 " + calMinute + "분 ";
-        String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
+        String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute;
         //추출한 표현값 리턴
 
-        System.out.println("extract result1:" + calTime );
+        System.out.println("extract calTime: " + calTime);
 
         //시간표현이 없을 때 일반 메모로 인식하기 위해 note라는 문자열을 리턴함.
-        if(calTime.equals(curTime))
+        if (calTime.equals(curTime))
             return "note";
 
-        if(isNote == true)
+        if (isNote == true)
             return "note";
 
         // 예약하려고 하는 시간에서 15분을 빼보고 그 값이 현재 값이랑 같거나, 작으면 15분 적용하는 것을 하지 않는다.
@@ -167,53 +169,51 @@ public class TimeAnalysis {
         int temcalYear = calYear;
 
         //15분을 뺀 시간으로 구해본다.
-        if(temcalMinute > 15) //분
+        if (temcalMinute > 15) //분
         {
             temcalMinute = temcalMinute - 15;
-        }
-        else
-        {
+        } else {
             temcalMinute = temcalMinute - 15 + 60;
-            if(temcalHour > 0) //시
+            if (temcalHour > 0) //시
             {
-                temcalHour= temcalHour - 1;
-            }
-            else
-            {
-                temcalHour= temcalHour -1 + 24;
-                if(temcalDay > 1)//일
+                temcalHour = temcalHour - 1;
+            } else {
+                temcalHour = temcalHour - 1 + 24;
+                if (temcalDay > 1)//일
                 {
-                    temcalDay = temcalDay -1;
-                }
-                else
-                {
+                    temcalDay = temcalDay - 1;
+                } else {
                     temcalDay = temcalDay - 1 + days[temcalMonth];
-                    if(temcalMonth > 1) //월
+                    if (temcalMonth > 1) //월
                     {
                         temcalMonth = temcalMonth - 1;
-                    }
-                    else
-                    {
-                        temcalMonth = temcalMonth -1 + 12;
+                    } else {
+                        temcalMonth = temcalMonth - 1 + 12;
                         temcalYear = temcalYear - 1;
                     }
                 }
             }
         }
 
+//        System.out.println("extract result3:" + temcalTime);
+//        System.out.println("extract result3:" + curTime);
+
+        //분으로 환산하기
+        long temValueMinute = (temcalYear * 15768000) + (temcalMonth * 43200) + (temcalDay  * 1440) + (temcalHour * 60) + temcalMinute;
+        long valueMinute = (curYear * 15768000) + (curMonth * 43200) + (curDay  * 1440) + (curHour * 60) + curMinute;
+
         //15분 뺀 값이 과거의 값이 아니면
-        if(temcalYear >= curYear && temcalMonth >= curMonth && temcalDay >= curDay && temcalHour >= curHour && temcalMinute > curMinute)
+        if(temValueMinute > valueMinute)
         {
-            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute ;
+            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute;
             return temcalTime;
         }
-
+//        System.out.println("extract result2:" + calTime);
         //과거의 값이라면
-        calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
-        System.out.println("extract result2:" + calTime );
-
+        calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute;
         return calTime;
     }
+
     /**
      * 이 메소드는 정규식을 이용하여 음성 파일에서 추출한 텍스트로부터 시간표현을 추출한다.
      * 메소드 시작과 동시에 공백을 없애주며, 유사 단어를 하나로 통합하여 관리한다.
@@ -410,7 +410,7 @@ public class TimeAnalysis {
 
         //하루 이틀 사흘 나흘 닷새 엿새 이레의 표현이 있을 경우
         regex = "[하루|이틀|사흘|나흘|닷새|닷세|엿새|엿세|이레|열흘|보름]+(후|뒤|있다가)";
-        extract103(searchTarget,regex);
+        extract103(searchTarget, regex);
 
         //오늘이라고 말할 경우
         regex = "(오늘)+";
@@ -427,7 +427,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "월" "일" "시" "분" 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract24(String searchTarget, String regex) { //월 일 시 분
@@ -472,7 +472,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "월" "일" "시"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract25(String searchTarget, String regex) { //월 일 시
@@ -517,7 +517,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "일" "시" "분" 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract26(String searchTarget, String regex) { //일 시 분
@@ -563,7 +563,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "일" "시"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract27(String searchTarget, String regex) { //일 시
@@ -609,7 +609,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "월" "일" "시" "반"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract28(String searchTarget, String regex) { //월 일 시 반
@@ -656,7 +656,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "일" "시" "반"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract29(String searchTarget, String regex) { //일 시 반
@@ -702,7 +702,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시간" "분" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract1(String searchTarget, String regex) { //~시간 ~분 후|뒤|있다가
@@ -723,7 +723,7 @@ public class TimeAnalysis {
 
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
 
-            if(calHour < 12)
+            if (calHour < 12)
                 calA = "오전";
         }
 
@@ -734,7 +734,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시간" "반" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract30(String searchTarget, String regex) { //~시간 ~반 후|뒤|있다가
@@ -751,7 +751,7 @@ public class TimeAnalysis {
             temp = result.replaceAll(" ", "").split("시간");
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
-            if(calHour < 12)
+            if (calHour < 12)
                 calA = "오전";
         }
 
@@ -762,7 +762,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시간" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract2(String searchTarget, String regex) { //~시간 후
@@ -778,7 +778,7 @@ public class TimeAnalysis {
             temp = result.split("시간");
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
-            if(calHour < 12)
+            if (calHour < 12)
                 calA = "오전";
         }
         return isExtracted;
@@ -788,7 +788,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시" "분"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract3(String searchTarget, String regex) { //~시 ~분
@@ -815,7 +815,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시" "반"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract4(String searchTarget, String regex) { //~시 반
@@ -844,7 +844,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "시"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract5(String searchTarget, String regex) { //~시
@@ -871,7 +871,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "분" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract6(String searchTarget, String regex) { //~분 후|뒤|있다가
@@ -896,7 +896,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "주" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract7(String searchTarget, String regex) { //~주 후
@@ -922,7 +922,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "월" "일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract8(String searchTarget, String regex) { //~월 ~일
@@ -961,7 +961,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "월"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract9(String searchTarget, String regex) { //~월
@@ -990,7 +990,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract10(String searchTarget, String regex) { //~일
@@ -1019,7 +1019,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "일" "후, 뒤, 또는 있다가"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract11(String searchTarget, String regex) { //~일 후(뒤)
@@ -1077,7 +1077,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "오늘", "다음날", 다다음날", 내일", 낼", 명일", 모레", 글피", "익일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return int 해당 정규식을 통해서 추출된 시간표현중 일수가 가장 최대치인 값
      */
     public int extract100(String searchTarget, String regex) { //[오늘|다음날|다다음날|다다음날|내일|낼|명일|모레|글피|익일|명일]+
@@ -1100,7 +1100,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "다음주" 또는 "다다음주"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract12(String searchTarget, String regex) { //다음주, 다다음주
@@ -1124,7 +1124,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "다음주" 또는 "다다음주" 그리고 "요일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract13(String searchTarget, String regex) { //다음주, 다다음주 월,화~일요일
@@ -1171,7 +1171,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "요일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract14(String searchTarget, String regex) { //일요일,월요일. 혹시 현재 화요일인데 월요일이라고하면 다음주가됨
@@ -1205,7 +1205,7 @@ public class TimeAnalysis {
 
             //TODO 요일에 관련된 함수들을 아래의 식을 적용시켜야한다. 추가 요망
             int day_num = days[curMonth];
-            if(day_num != calDay) {
+            if (day_num != calDay) {
                 calMonth += calDay / day_num;
             }
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
@@ -1220,7 +1220,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "오전" ,"오후" 또는 오전 오후의 값이 명시되지 않는 값에 대해서, 추출한 시간 표현에  WorkTime 규칙을 적용하여 설정할 시간 값을 계산해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract101(String searchTarget, String regex) { //오전, 오후
@@ -1251,11 +1251,11 @@ public class TimeAnalysis {
                 calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
             }
         } else if (result.equals("오전") || calA.equals("오전")) { //오전
-            System.out.println("extract " + result + "extract2 " + calA);
+            System.out.println("extract result : " + result + "extract calA :  " + calA);
 
             calA = "오전";
-            System.out.println("extract " + calDay + ":" + calHour + ":" + calMinute);
-            System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay );
+            System.out.println("extract CALDAY & HOUR + MINUTE : " + calDay + ":" + calHour + ":" + calMinute);
+            System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay);
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
 
                 calDay += 1;
@@ -1307,7 +1307,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "다음주" 또는 "다다음주" 그리고 "요일", "시", "분"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract15(String searchTarget, String regex) { //다/다음주 ~요일 오전/오후 ~요일 ~시 ~분
@@ -1367,7 +1367,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "다음주" 또는 "다다음주" 그리고 "요일", "시", "반"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract16(String searchTarget, String regex) { //다/다음주 ~요일 ~시 반
@@ -1425,7 +1425,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "다음주" 또는 "다다음주" 그리고 "요일", "시"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract17(String searchTarget, String regex) { //다/다음주 ~요일 ~시
@@ -1483,7 +1483,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "요일", "시", "분"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract18(String searchTarget, String regex) { //~요일 ~시 ~분
@@ -1516,7 +1516,7 @@ public class TimeAnalysis {
             extract101(searchTarget, regex);
 
             //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1539,7 +1539,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "요일", "시", "반"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract19(String searchTarget, String regex) { //~요일 ~시 ~반
@@ -1572,7 +1572,7 @@ public class TimeAnalysis {
 
             //TODO 오류 수정 바람
             //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1596,7 +1596,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로 "요일", "시"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract20(String searchTarget, String regex) { //~요일 ~시
@@ -1639,9 +1639,7 @@ public class TimeAnalysis {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
-            }
-
-            else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
+            } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1660,7 +1658,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로  "시", "분", "요일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract21(String searchTarget, String regex) { // ~시 ~분 ~요일
@@ -1715,7 +1713,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로  "시", "반", "요일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract22(String searchTarget, String regex) { // ~시 ~반 ~요일
@@ -1771,7 +1769,7 @@ public class TimeAnalysis {
      * 이 메소드는 음성에서 추출한 시간표현에 순서대로  "시","요일"에 대한 정보가 있을 시, 시간 표현을 추출하여 설정 시간 값에 할당해준다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract23(String searchTarget, String regex) { // ~시 ~요일
@@ -1801,7 +1799,7 @@ public class TimeAnalysis {
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
             //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1826,7 +1824,7 @@ public class TimeAnalysis {
      * isNextDay 변수는 시간 계산에 있어서, 하루가 넘어가는 것을 막아주는 역할을 한다.
      *
      * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
-     * @param regex 정규식 표현
+     * @param regex        정규식 표현
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract102(String searchTarget, String regex) { //오늘
@@ -1868,6 +1866,8 @@ public class TimeAnalysis {
         calYear += calMonth / 13;
         calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         if (calHour >= 12) calA = "오후";
+
+        isNextDay = true; // 위에서 하루를 추가해주기 때문에 isNexDay로 하루를 넘겼다는 표시를 해줘야한다.
     }
 
     /**
