@@ -161,53 +161,53 @@ public class TimeAnalysis {
             return "note";
 
         // 예약하려고 하는 시간에서 15분을 빼보고 그 값이 현재 값이랑 같거나, 작으면 15분 적용하는 것을 하지 않는다.
-
-        int temcalMinute = calMinute;
-        int temcalHour = calHour;
-        int temcalDay = calDay;
-        int temcalMonth = calMonth;
-        int temcalYear = calYear;
-
-        //15분을 뺀 시간으로 구해본다.
-        if (temcalMinute > 15) //분
-        {
-            temcalMinute = temcalMinute - 15;
-        } else {
-            temcalMinute = temcalMinute - 15 + 60;
-            if (temcalHour > 0) //시
-            {
-                temcalHour = temcalHour - 1;
-            } else {
-                temcalHour = temcalHour - 1 + 24;
-                if (temcalDay > 1)//일
-                {
-                    temcalDay = temcalDay - 1;
-                } else {
-                    temcalDay = temcalDay - 1 + days[temcalMonth];
-                    if (temcalMonth > 1) //월
-                    {
-                        temcalMonth = temcalMonth - 1;
-                    } else {
-                        temcalMonth = temcalMonth - 1 + 12;
-                        temcalYear = temcalYear - 1;
-                    }
-                }
-            }
-        }
+//
+//        int temcalMinute = calMinute;
+//        int temcalHour = calHour;
+//        int temcalDay = calDay;
+//        int temcalMonth = calMonth;
+//        int temcalYear = calYear;
+//
+//        //15분을 뺀 시간으로 구해본다.
+//        if (temcalMinute > 15) //분
+//        {
+//            temcalMinute = temcalMinute - 15;
+//        } else {
+//            temcalMinute = temcalMinute - 15 + 60;
+//            if (temcalHour > 0) //시
+//            {
+//                temcalHour = temcalHour - 1;
+//            } else {
+//                temcalHour = temcalHour - 1 + 24;
+//                if (temcalDay > 1)//일
+//                {
+//                    temcalDay = temcalDay - 1;
+//                } else {
+//                    temcalDay = temcalDay - 1 + days[temcalMonth];
+//                    if (temcalMonth > 1) //월
+//                    {
+//                        temcalMonth = temcalMonth - 1;
+//                    } else {
+//                        temcalMonth = temcalMonth - 1 + 12;
+//                        temcalYear = temcalYear - 1;
+//                    }
+//                }
+//            }
+//        }
 
 //        System.out.println("extract result3:" + temcalTime);
 //        System.out.println("extract result3:" + curTime);
 
-        //분으로 환산하기
-        long temValueMinute = (temcalYear * 15768000) + (temcalMonth * 43200) + (temcalDay  * 1440) + (temcalHour * 60) + temcalMinute;
-        long valueMinute = (curYear * 15768000) + (curMonth * 43200) + (curDay  * 1440) + (curHour * 60) + curMinute;
-
-        //15분 뺀 값이 과거의 값이 아니면
-        if(temValueMinute > valueMinute)
-        {
-            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute;
-            return temcalTime;
-        }
+//        //분으로 환산하기
+//        long temValueMinute = (temcalYear * 15768000) + (temcalMonth * 43200) + (temcalDay  * 1440) + (temcalHour * 60) + temcalMinute;
+//        long valueMinute = (curYear * 15768000) + (curMonth * 43200) + (curDay  * 1440) + (curHour * 60) + curMinute;
+//
+//        //15분 뺀 값이 과거의 값이 아니면
+//        if(temValueMinute > valueMinute)
+//        {
+//            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute;
+//            return temcalTime;
+//        }
 //        System.out.println("extract result2:" + calTime);
         //과거의 값이라면
         calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute;
