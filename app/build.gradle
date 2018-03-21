@@ -24,7 +24,7 @@ ext {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.google.cloud.android.speech"
@@ -41,6 +41,8 @@ android {
             keyPassword project.properties.keyPassword
         }
     }
+
+    flavorDimensions "default"
 
     productFlavors {
         dev {

@@ -22,8 +22,11 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        //Error:Could not determine the dependencies of task ':app:extractIncludeDebugProto'.
+        //> Resolving configuration 'debugCompile' directly is not allowed
+        // flavorDimension문제를 해결했더니 위의 에러가 떠서 protobuf plugin을 0.8.0 에서 0.8.2로 upgrade(0.8.0 -> 0.8.2로 수정)
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
