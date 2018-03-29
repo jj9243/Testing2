@@ -72,8 +72,6 @@ public class Main2Activity extends AppCompatActivity {
         bpToast = Toast.makeText(this, "뒤로가기를 한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT);
 
 
-
-
     }
 
     @Override
@@ -125,6 +123,11 @@ public class Main2Activity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * 이 메소드는 뒤로가기 버튼을 눌렀을 경우 앱이 바로 꺼지는 것을 방지한다.
+     * 2초 안에 다시 뒤로가기 버튼을 눌렀을 경우 앱을 종료한다.
+     */
     @Override
     public void onBackPressed() {
         //참고 : http://best421.tistory.com/71
@@ -155,6 +158,12 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 이 메소드는 사용자가 녹음 버튼을 누를 때, 네트워크 상태를 체크한 뒤, 네트워크가 연결되어 있을 경우 RecordActivity를 실행한다.
+     *
+     * @param v
+     */
+
     public void onButtonRecordClicked(View v) {
         //네트워크 연결 상태 체크 ** 중요 ** - 출처 : http://developer88.tistory.com/104
         //네트워크 연결 시에만 녹음 및 stt가능
@@ -170,6 +179,14 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 이 메소드는 사용자가 재생 버튼을 누를 때, 현재 리마인더 목록을 확인 후
+     * 비어 있으면 토스트 메시지를, 1개 이상의 리마인더가 있을 경우 재생 목록을 보여주는
+     * PlayListActivity를 실행한다.
+     *
+     * @param v
+     */
+
     public void onButtonPlayClicked(View v) {
 //        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
 //        startActivity(intent);
@@ -182,6 +199,13 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 이 메소드는 녹음 전, 네트워크를 통해 구글 STT로 전달된 사용자 발화를 Text로 변환받아야 하기 때문에
+     * 네트워크 연결 여부를 사전에 확인하기 위한 메소드이다.
+     *
+     * @return networkInfo 네트워크 인터페이스의 상태를 나타낸다.
+     */
+
     private NetworkInfo getNetworkInfo() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -191,6 +215,10 @@ public class Main2Activity extends AppCompatActivity {
     /**
      * Permission을 체크한다. Permission 되어있지 않을 경우 다이얼로그를 통해
      * 유저에게 이를 알린다.
+     *
+     * @param requestCode 사용자가 record하는 것의 permission code 0 혹은 REQUEST_RECORD_AUDIO_PERMISSION과 같지 않을 경우 권한을 받아야 한다.
+     * @param permissions
+     * @param  grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -241,13 +269,16 @@ public class Main2Activity extends AppCompatActivity {
      * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
      * CustomStartApp과 연결되어 있다.
      */
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
 
+    /**
+     * 리마인더를 구글 캘린더와 연결하기 이전에 구글 계정을 이 앱과 연동하기 위해 필요한 함수이다.
+     * intent를 통해 기기 내에 등록된 계정을 선택할 수 있는 Activity가 뜬다.
+     */
 //    출처: http://shnoble.tistory.com/80 [노블의 개발이야기]
     int REQUEST_CODE = 300;
     private void chooseAccountIntent() {
@@ -255,6 +286,16 @@ public class Main2Activity extends AppCompatActivity {
                 null, null, new String[]{"com.google"}, null, null, null, null);
         startActivityForResult(intent, REQUEST_CODE);
     }
+
+    /**
+     * chooseAccountIntent를 통해 구글 계정의 이름과 타입을 받아온 뒤,
+     * SharedPreferences를 이용하여 userAccount의 값을 수정한다
+     *
+     * @param requestCode 다양한 Activity와의 소통이 있을 수 있으므로, 이전 chooseAccountIntent의 REQUEST_CODE 값과 일치하는지 확인한다.
+     * @param resultCode
+     * @param data 사용자가 선택한 계정에 관한 정보가 담겨있다.
+     */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -73,7 +73,14 @@ import io.grpc.internal.DnsNameResolverProvider;
 import io.grpc.okhttp.OkHttpChannelProvider;
 import io.grpc.stub.StreamObserver;
 
-
+/*
+ * 구글에서 제공하는 샘플 코드에 나와있던 STT서버에 사용자 발화 음성 파일을 보낼 때,
+ * 언어 설정, 파일로 보낼 것인지 Streaming으로 보낼 것인지 등을 설정하는
+ * STT 와의 통신을 담당하는 Class
+ *
+ * 직접 파일을 전송하는 방식 때문에
+ * recognizeInputStream 이라는 메소드를 주로 사용한다.
+ */
 public class SpeechService extends Service {
 
     public interface Listener {

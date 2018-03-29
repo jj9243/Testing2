@@ -16,6 +16,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
  * 그 이유는 후에 디비 파일을 컴퓨터로 추출해서 볼 때, 지원하는 글자 형식의 타입이
  * 텍스트 타입이기 때문이다.
  * String을 사용하여 insert 와 select를 했을 때 문제가 없었던 걸로 보아 유사한 타입인 것 같다.
+ *
+ * @param db
  */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -25,6 +27,10 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     /**
      * 위와 마찬가지로 컴퓨터에서 혹시 디비 파일을 수정했을 때
      * 컴퓨터 파일을 반영하기 위해 사용하였다.
+     *
+     * @param db
+     * @param oldVersion
+     * @param newVersion
  */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -25,7 +25,11 @@ import android.widget.Toast;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-
+/**
+ * AlarmSoundService를 통해 예외 사항을 거친 알람이
+ * 애니메이션, 소리 그리고 진동을 통해 울리도록 도와주는 Class
+ *
+ */
 public class AlarmActivity extends AppCompatActivity {
 
     public static Handler ahandler; // 알람 화면 처리 핸들러(알람이 끝나면 알람 화면 종료하도록)
@@ -183,7 +187,11 @@ public class AlarmActivity extends AppCompatActivity {
             }
         };
     }
-
+    /**
+     * Activity가  Start state에 있을 때, 알람의 text와 녹음 파일을 받아
+     * Activity의 textView에 알람 텍스트를 보여주고
+     * 타이머를 시작하여 진동 혹은 소리가 울릴 수 있도록 한다.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -212,6 +220,8 @@ public class AlarmActivity extends AppCompatActivity {
         //시작도 전에 종료가 된다. 그래서 onUserLeaveHint()를 사용하기로 했다.
     }
 
+
+
     @Override
     protected void onUserLeaveHint() { //홈버튼, 멀티버튼을 누르거나 이 액티비티에서 다른 액티비티로 넘어갈 때 onPause직전에 호출된다.
         //다른 액티비티로 넘어갈 때 호출되지 않는 방법은 해당 인텐트에 FLAG_ACTIVITY_NO_USER_ACTION를 추가하면 되는듯.
@@ -234,7 +244,6 @@ public class AlarmActivity extends AppCompatActivity {
      * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
      * CustomStartApp과 연결되어 있다.
      */
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));

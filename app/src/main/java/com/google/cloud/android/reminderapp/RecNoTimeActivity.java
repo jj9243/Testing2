@@ -13,6 +13,12 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.w3c.dom.Text;
 
+/**
+ * 사용자 발화에 시간 표현이 단 한 개도 없을 경우,
+ * 일반 메모(사용자가 정해진 시간에 알려주길 원하지 않지만, 때때로 기억하고 싶은 것을 저장한 리마인더)
+ * 임을 사용자에게 알려주고 제대로 등록되었다는 것을 또한 알려주기 위한 Activity
+ */
+
 public class RecNoTimeActivity extends AppCompatActivity {
     String fileName, returnedValue;
     DataBase db;

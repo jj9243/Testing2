@@ -60,6 +60,9 @@ public class RecTimeActivity extends AppCompatActivity {
         contentValue = intent.getStringExtra("c_value");
     }
 
+    /**
+     * 이 메소드는 사용자 발화 분석이 종료된 후, 알람 시간을 calender와 db에 저장하는 역할을 담당한다.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -282,7 +285,13 @@ public class RecTimeActivity extends AppCompatActivity {
         finish();
     }
 
-    //녹음 후 화면에 표시해주는 것을 설정해준다.
+
+    /**
+     * 녹음 후 화면에 표시해주는 글자 수를 정리해 주는 메소드 ( 현재는 사용하지 않는 듯 함)
+     *
+     * @param contentValue STT에서 리턴 된 사용자 발화
+     * @param i 1: 2:
+     */
     public String recordCutValue(String contentValue, int i) { //기기에 따라 화면의 한 줄에 들어갈 수 있는 글자 수가 다를 수 있고, 화면도 크기 때문에 사용 안 할 예정.
         String cutvalue = "";
 

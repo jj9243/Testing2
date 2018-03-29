@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+/**
+ * 음성 녹음이 실패했을 경우( 네트워크 문제 등) 사용자에게 안내하는 Activity
+ */
+
 public class RecFailActivity extends AppCompatActivity {
 
     @Override

@@ -2,9 +2,23 @@ package com.google.cloud.android.reminderapp;
 
 /**
  * Created by 박재성 on 2017-08-02.
+ *
+ * 구글 STT로 부터 return 받은 text를 사전에 정리하는 class이다.
+ * (시간표현 추출 및, 시간 표현을 계산 가능한 형식으로 통일)
+ *
+ * ex) 한 시, 13시, 1시를 모두 1시로 통일
+ *
  */
 
 public class ContentAnalysis {
+
+    /**
+     * 구글 STT로 부터 리턴받은 사용자 발화 텍스트로부터 시간표현을 추출하는 메소드이다.
+     *
+     * @param target 구글 STT로 부터 리턴 받은 사용자 발화 텍스트
+     * @return contentValue 사용자 발화 텍스트로부터 추출된 시간표현
+     */
+
 
     public String Analysis(String target) {
 
@@ -33,6 +47,13 @@ public class ContentAnalysis {
 
         return contentValue;
     }
+
+    /**
+     * 사용자 발화에서 나타난 시간표현을 계산 가능한 형태로 변환하는 메소드
+     *
+     * @param searchTarget 사용자로 부터 입력받은 음성에서 텍스트를 변환한 String 값
+     * @return searchTarget
+     */
         public String extractManager(String searchTarget) {
 
             searchTarget = searchTarget.replaceAll(" ", "");

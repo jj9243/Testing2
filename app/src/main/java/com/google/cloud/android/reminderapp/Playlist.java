@@ -4,6 +4,8 @@ import android.util.StringBuilderPrinter;
 
 /**
  * Created by 이상원 on 2017-07-27.
+ *
+ * 리마인더의 재생목록의 정보를 가지고 있는 class
  */
 
 public class Playlist {

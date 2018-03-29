@@ -38,6 +38,8 @@ import static com.google.cloud.android.reminderapp.R.id.center;
 import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
 import static com.google.cloud.android.reminderapp.R.id.default_activity_button;
 
+
+
 public class PlayActivity extends AppCompatActivity {
     public static Activity Pactivity; //PlayListActivity에서 홈버튼을 누를 때 사용될 것임
     DataBase db;

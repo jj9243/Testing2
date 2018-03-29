@@ -11,6 +11,15 @@ import android.widget.Toast;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+
+/**
+ * AlarmSoundService가 class 이름이어서 Sound를 직접 재생하는 것으로 오해하기 쉬우나,
+ * 그 뒤에서 녹음이 진행 중일 때, 알람을 녹음 뒤로 미룬다던가,
+ * 리마인더를 녹음했던 파일을 듣고 있을 때, 이를 멈추고 알람을 울리게 하는 등, 예외사항을 처리하는 것에 더 가까운 Class이다.
+ * 예외 사항을 알람을 울리는 것보다 먼저 처리해야 하기 때문에
+ * 알람을 실제로 울리게 하는 AlarmActivity보다 사전에 실행한다.
+ */
+
 public class AlarmSoundService extends Service {
     Context context;
     public static VoicePlayer mVoicePlayerAlarm;
@@ -23,7 +32,14 @@ public class AlarmSoundService extends Service {
         super.onCreate();
         context = getApplicationContext();
     }
-
+    /**
+     * @see AlarmReceiver 로 부터 받았던 intent로 부터 alarmText와 녹음 파일 제목을 받아
+     * 알람의 진동과, 소리, 애니메이션 등을 담당하는 AlarmActivity로 이를 전송한다.
+     *
+     * @param  intent 알람 text와 녹음된 파일 이름 등을 가지고 있다.
+     * @param  flags
+     * @param  startId
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String alarmText = intent.getStringExtra("alarmtext");

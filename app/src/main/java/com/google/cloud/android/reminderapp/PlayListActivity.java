@@ -143,6 +143,10 @@ public class PlayListActivity extends AppCompatActivity {
 //            imageButton.setImageResource(R.drawable.play_btn2);
 //        }
 
+        /**
+         * 재생이 끝나고 다음 리마인더가 재생될 경우 하이라이트를 바꾸는 handler
+         */
+
         phandler = new Handler() {
             public void handleMessage(Message msg) {
                 //재생 중이면
@@ -392,6 +396,11 @@ public class PlayListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Activity가 start state에 있을 때, 재생 목록을 초기화 하거나
+     * pause상태에서 돌아왔을 때, 다시 리마인더를 재생시키는 일을 수행한다.
+     */
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -482,7 +491,9 @@ public class PlayListActivity extends AppCompatActivity {
 //        startActivity(intent);
         //finish();
     }
-
+    /**
+     * 리마인더를 목록에서 선택할 경우, 몇 개가 선택되었는지 countText라는 이름의 TextView에 띄워주는 역할을 함
+     */
     public void checkCount() {
         int checkCount = 0;
         {
@@ -657,6 +668,10 @@ public class PlayListActivity extends AppCompatActivity {
         if (contentName.length() > len) return contentName.substring(0, len) + "..";
         else return contentName;
     }
+
+    /**
+     * 한 자리 수의 시간일 경우 앞에 0을 붙여 Format을 일정하게 하도록 도와주는 함수
+     */
 
     public String timeFormatFunc(String rawTime) {
         String words[] = rawTime.split(":");
