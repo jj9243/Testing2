@@ -25,8 +25,6 @@ public class PlaylistView extends LinearLayout {
     CheckBox checkbox;
     boolean checkState = false;
 
-//    Typeface type = Typeface.createFromAsset(getContext().getAssets(), "font.ttf");
-
     public PlaylistView(Context context) {
         super(context);
         init(context);
@@ -47,8 +45,6 @@ public class PlaylistView extends LinearLayout {
         imageView = (ImageView) findViewById(R.id.imageView);
         checkbox = (CheckBox) findViewById(R.id.checkbox);
 
-        //글씨체 설정
-//        textView.setTypeface(type);
     }
 
     public void setVisible() {

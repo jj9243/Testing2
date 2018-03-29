@@ -124,14 +124,11 @@ public class VoicePlayer {
             PlayActivity.vhandler.sendMessage(message);
 
             try {
-                //Toast.makeText(context.getApplicationContext(),"현재 재생중인 파일 " + fileName[i] +"",Toast.LENGTH_SHORT).show();
                 FileInputStream fis = context.openFileInput(fileName[i]);
                 DataInputStream dis = new DataInputStream(fis);
                 int minBufferSize = AudioTrack.getMinBufferSize(SampleRate, CHANNEL, ENCODING);
-//                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack.play();
-//                audioTrack.setVolume()
 
                 //progress bar의 범위인 0 ~ 100 에 맞도록 한 번에 채울 바의 크기를 계산
                 int totalLength = dis.available(); //스트림으로부터 읽어들일 수 있는 바이트의 추정치 리턴
@@ -223,13 +220,6 @@ public class VoicePlayer {
     public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) { //해당 알람내용을 한 번만 재생하도록 한다.
         mIsPlaying2 = true;
 
-//        boolean isFinished = false;
-//        long startTime = System.currentTimeMillis();
-
-//        while(true) {
-//            if(isFinished) {
-//                mIsPlaying2 = false;
-//            }
             int count = 0;
             byte[] data = new byte[mBufferSize];
 
@@ -237,16 +227,10 @@ public class VoicePlayer {
                 FileInputStream fis = context.openFileInput(filename);
                 DataInputStream dis = new DataInputStream(fis);
                 int minBufferSize = AudioTrack.getMinBufferSize(SampleRate, CHANNEL, ENCODING);
-//                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack.play();
 
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying2) {
-//                    long endTime = System.currentTimeMillis();
-//                    if((endTime - startTime) / 1000.0f >= 60) {
-//                        isFinished = true;
-//                        break;
-//                    }
                     SharedPreferences preference = context.getSharedPreferences("volume", context.MODE_PRIVATE);
                     float volume = preference.getFloat("volume", 1f);
                     audioTrack.setVolume(volume);
@@ -260,13 +244,6 @@ public class VoicePlayer {
                 if(!mIsPlaying2) {
                     return;
                 }
-
-//                if(!mIsPlaying2) {
-//                    //알람이 끝나면 AlarmActivity로 알람이 끝났음을 알린다.
-//                    Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
-//                    AlarmActivity.ahandler.sendMessage(message);
-//                    break;
-//                }
 
                 // 버튼을 play_btn2로 변경할 수 있도록 재생이 끝나면 알려준다.
                 System.out.println("ahandler 여기서 콜하나");

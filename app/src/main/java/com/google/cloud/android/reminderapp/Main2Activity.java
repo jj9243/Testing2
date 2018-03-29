@@ -57,17 +57,10 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-//        //볼륨조절하기 볼륨 최대로 참조 : http://blog.naver.com/oh4zzang/40114444637
-        //이것을 이용하면 처음 시작할 때마다 볼륨을 최대로 초기화해 주는 것 같음.
-        //사용자가 볼륨을 조절할 수 있도록 이것은 주석처리.
-//        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//        audio.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ), AudioManager.FLAG_PLAY_SOUND);
-
         db = new DataBase(Main2Activity.this);
-        mVoiceRecorder = new VoiceRecorder(this, mVoiceCallback);
+        mVoiceRecorder = new VoiceRecorder(this);
         mVoicePlayer = new VoicePlayer(this);
-//        record = (Button) findViewById(R.id.record);
-//        play = (Button) findViewById(R.id.play);
+
         countList = (Button) findViewById(R.id.countlist);
         bpToast = Toast.makeText(this, "뒤로가기를 한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT);
 
@@ -90,29 +83,7 @@ public class Main2Activity extends AppCompatActivity {
         }
         else {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.RECORD_AUDIO},0);
-           // ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
         }
-
-//  /*
-//        출처 : http://mommoo.tistory.com/49
-//         */
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED){
-//            //Manifest.permission.READ_CALENDAR이 접근 승낙 상태 일때
-//        } else{
-//            //Manifest.permission.READ_CALENDAR이 접근 거절 상태 일때
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_CALENDAR)){
-//                //사용자가 다시 보지 않기에 체크를 하지 않고, 권한 설정을 거절한 이력이 있는 경우
-//                showPermissionMessageDialog();
-//            } else{
-//                //사용자가 다시 보지 않기에 체크하고, 권한 설정을 거절한 이력이 있는 경우
-//            }
-//
-//            //사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
-//            //만약 사용자가 다시 보지 않기에 체크를 했을 경우엔 권한 설정 다이얼로그가 뜨지 않고,
-//            //곧바로 OnRequestPermissionResult가 실행된다.
-//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.RECORD_AUDIO},0);
-//
-//        }
 
 
         //        //  출처: http://shnoble.tistory.com/80 [노블의 개발이야기]
@@ -188,8 +159,6 @@ public class Main2Activity extends AppCompatActivity {
      */
 
     public void onButtonPlayClicked(View v) {
-//        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
-//        startActivity(intent);
         if(db.getAllPlayListNum() > 0) {
             Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
             startActivity(intent);
@@ -259,11 +228,6 @@ public class Main2Activity extends AppCompatActivity {
     public static DataBase getDBInstance() {
         return db;
     }
-
-    // 완성 후 mVoiceCallback 지워도 상관없으면 지우기.
-    private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
-
-    };
 
     /**
      * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.

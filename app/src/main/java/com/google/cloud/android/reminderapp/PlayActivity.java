@@ -81,7 +81,6 @@ public class PlayActivity extends AppCompatActivity {
         atImage = (ImageView) findViewById(R.id.alarm_image);
 
         progress = (ProgressBar) findViewById(R.id.progress);
-//        progress.getProgressDrawable().setColorFilter(Color.argb(100,128,158,182), PorterDuff.Mode.SRC_IN);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);
@@ -103,10 +102,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        //backwardsBtn과 forwardBtn의 역할을 바꾸라는 피드백
-        //기존에는 backwardsBtn을 누르면 최신 것으로, forwardBtn을 누르면 과거의 것으로(녹음 시간 기준) 이동했는데
-        //반대로 수정.
-//        backwardsBtn.setOnClickListener(new View.OnClickListener() {
+        //최신 것으로 이동
         forwardBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
@@ -130,55 +126,10 @@ public class PlayActivity extends AppCompatActivity {
                     //재생 화면에 녹음 시간, 알람 시간 출력
                     showTime(playingPos);
                 }
-                /* //재생 중일 때는 다음 파일도 재생하는 코드
-                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
-                    //현재 재생 중인 파일 재생 중지 후
-                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-
-                    if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
-                        button.setImageResource(R.drawable.play_btn3);
-                        Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        try {
-                            Thread.sleep(500);
-                        } catch(InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        //직전 파일 재생
-                        Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, (playingPos + 1) + 1);
-
-                        //TextView 변경
-                        String returnedValue[] = db.getAllContent();
-                        textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
-
-                        //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
-                        playingPos++;
-                        button.setImageResource(R.drawable.stop_btn); //버튼도 변경해줘야 함.
-
-                        //재생 화면에 녹음 시간, 알람 시간 출력
-                        showTime(playingPos);
-                    }
-                }
-                else { //재생 중이지 않은 경우
-                    if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
-                        Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        //TextView 변경
-                        String returnedValue[] = db.getAllContent();
-                        textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
-                        playingPos++; //***
-
-                        //재생 화면에 녹음 시간, 알람 시간 출력
-                        showTime(playingPos);
-                    }
-                }*/
             }
         });
 
-//        forwardBtn.setOnClickListener(new View.OnClickListener() {
+//      과거의 것으로 이동
         backwardsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
@@ -202,54 +153,6 @@ public class PlayActivity extends AppCompatActivity {
                     //재생 화면에 녹음 시간, 알람 시간 출력
                     showTime(playingPos);
                 }
-                /* //재생 중일 때는 다음 파일도 재생하는 코드
-                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
-                    //현재 재생 중인 파일 재생 중지 후
-                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-
-                    if(playingPos == 0) { //맨 뒤인 경우
-                        button.setImageResource(R.drawable.play_btn3);
-                        Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        try {
-                            Thread.sleep(500);
-                        } catch(InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        //다음 파일 재생
-                        Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, (playingPos - 1) + 1);
-
-                        //TextView 변경
-                        String returnedValue[] = db.getAllContent();
-                        textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
-
-                        //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
-                        playingPos--;
-
-                        //버튼 변경이 vhandler에 비해 좀 늦어져서, vhandler에 버튼변경을 배치하였음.
-//                        button.setImageResource(R.drawable.stop_btn2); //버튼도 변경해줘야 함.
-
-                        //재생 화면에 녹음 시간, 알람 시간 출력
-                        showTime(playingPos);
-                    }
-                }
-                else { //재생 중이지 않은 경우
-                    if(playingPos == 0) { //맨 뒤인 경우
-                        Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        System.out.println("여기에 안들어오노? forwardbtn");
-                        //TextView 변경
-                        String returnedValue[] = db.getAllContent();
-                        textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
-                        playingPos--;  //***
-
-                        //재생 화면에 녹음 시간, 알람 시간 출력
-                        showTime(playingPos);
-                    }
-                }*/
             }
         });
 
@@ -274,18 +177,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-//        infoBtn.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                if(Main2Activity.mVoicePlayer.mIsPlaying) {
-//                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-//                    button.setImageResource(R.drawable.play_btn2);
-//                }
-//                //PlayInfoActivity 호출
-//                Intent intent = new Intent(getApplicationContext(), PlayInfoActivity.class);
-//                intent.putExtra("playingpos", playingPos);
-//                startActivityForResult(intent, 99);
-//            }
-//        });
         homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(Main2Activity.mVoicePlayer.mIsPlaying) {
@@ -481,11 +372,7 @@ public class PlayActivity extends AppCompatActivity {
             return;
         }
         System.out.println("삭제 취소하면 여기로 1");
-//        if (!Main2Activity.mVoicePlayer.isPlaying()) {
-//            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
-//            System.out.println("삭제 취소하면 여기로 2 와서 재생돼야 하지 않음?");
-//            playCount = -2;
-//        }
+
         //TextView 변경
         String returnedValue[] = db.getAllContent();
         textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
@@ -521,12 +408,9 @@ public class PlayActivity extends AppCompatActivity {
             listBtnClicked = false;
         }
         else { //listBtn을 클릭하지 않은 경우의 화면 전환에서는 재생을 멈춰준다.
-            //mIsPlaying을 체크하지 않으면, 다이얼로그를 띄웠다가 삭제한 후에 playCount값(playingPos값)이 변경되는 문제가 생긴다.
-            //arrayoutofbound exception 생겼었음.
-//            if(Main2Activity.mVoicePlayer.mIsPlaying)
-//                playCount = Main2Activity.mVoicePlayer.stopPlaying() + 1;
+
             if(!delBtnClicked) {
-                //알람 화면에서 전환되어 onPause에 들어올 경우, 재생 중이지 않더라도 stopPlaying 메소드를 통해 playingPos값을 얻어야 한다...
+                //알람 화면에서 전환되어 onPause에 들어올 경우, 재생 중이지 않더라도 stopPlaying 메소드를 통해 playingPos값을 얻어야 한다
                 playingPos = Main2Activity.mVoicePlayer.stopPlaying();
                 playCount = playingPos + 1;
             }
@@ -637,7 +521,7 @@ public class PlayActivity extends AppCompatActivity {
         String[] fileNameArr = db.getAllFileName();
 
         if (alarmTimeArr[playingPos].equals("일반 메모")) {
-//            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]));
+
             String recTime = recordTime(fileNameArr[playingPos]);
             rtText1.setText("녹음시각 " + recTime.substring(0, 5));
             rtText2.setText(recTime.substring(5, 8) + "/" + recTime.substring(9, 11) + ")");
@@ -648,16 +532,14 @@ public class PlayActivity extends AppCompatActivity {
             String[] words = alarmTimeArr[playingPos].split(":");
             if (Integer.parseInt(words[3]) < 10) words[3] = '0' + words[3];
             if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
-//            String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
+
             String hhmm = words[3] + ":" + words[4];
             String MMdd =  "(" + words[1] + "/" + words[2] + ")";
 
-//            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]) );
             String recTime = recordTime(fileNameArr[playingPos]);
             rtText1.setText("녹음시각 " + recTime.substring(0, 5));
             rtText2.setText(recTime.substring(5, 8) + "/" + recTime.substring(9, 11) + ")");
 
-//            atText.setText(timeRegistered);
             atText1.setText(hhmm);
             atText2.setText(MMdd);
             atImage.setVisibility(View.VISIBLE);

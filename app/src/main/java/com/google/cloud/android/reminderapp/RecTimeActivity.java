@@ -44,14 +44,6 @@ public class RecTimeActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
         textContent = (TextView) findViewById(R.id.textContent);
 
-//        ImageButton button = (ImageButton) findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                //메인으로 돌아간다
-//                finish();
-//            }
-//        });
-
         //RecordActivity로부터 전달받은 intent를 확인한다.
         Intent intent = getIntent();
         fileName = intent.getStringExtra("f_name");
@@ -91,8 +83,6 @@ public class RecTimeActivity extends AppCompatActivity {
             alarmText = timeRegistered;
         }
         else {
-//            textView.setText(timeRegistered + "\n" + recordCutValue(contentValue, 2));
-//            alarmText = timeRegistered + "\n" + recordCutValue(contentValue, 2);
             textView.setText(timeRegistered);
             textContent.setText(contentValue.replaceAll(" ", ""));
             alarmText = timeRegistered + "\n" + contentValue;
@@ -109,8 +99,6 @@ public class RecTimeActivity extends AppCompatActivity {
             db.insert(fileName, alarmTime, returnedValue);
             System.out.println("db에 시간메모 저장");
         }
-
-        //Toast.makeText(getApplicationContext(), returnedValue, Toast.LENGTH_LONG).show();
 
         ///////////////////////////////알람 설정 //////////////////////////////////////////
         ///////////////////////알람 설정//////////////////////////

@@ -110,7 +110,6 @@ public class PlayListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_list);
 
         PLactivity = this; //재생이 모두 끝나면 list화면도 같이 종료하는 데에 사용됨.
-//        imageButton = (ImageButton) findViewById(R.id.imageButton);
 
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
@@ -124,24 +123,12 @@ public class PlayListActivity extends AppCompatActivity {
         //cancelBtn과 deletefinalBtn을 포함하고 있는 linearlayout
         underBtnsRelative = (RelativeLayout) findViewById(R.id.underBtnsRelative);
 
-//        textView = (TextView) findViewById(R.id.text);
-//        textView.setMovementMethod(new ScrollingMovementMethod());
+
 
 
         db = Main2Activity.getDBInstance();
         count = db.getAllPlayListNum();
 
-//        test = new String[count];
-//        test = db.getAllContent();
-
-
-//        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 -> onStart()에서 해주는 걸로...
-//        if(Main2Activity.mVoicePlayer.mIsPlaying) {
-//            imageButton.setImageResource(R.drawable.stop_btn2);
-//        }
-//        else {
-//            imageButton.setImageResource(R.drawable.play_btn2);
-//        }
 
         /**
          * 재생이 끝나고 다음 리마인더가 재생될 경우 하이라이트를 바꾸는 handler
@@ -178,19 +165,6 @@ public class PlayListActivity extends AppCompatActivity {
             }
         };
 
-//        imageButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중
-//                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-//                    imageButton.setImageResource(R.drawable.play_btn2);
-//                }
-//                else {
-//                    System.out.println("왜 종료가 되는기야?" + playingPos);
-//                    Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
-//                    imageButton.setImageResource(R.drawable.stop_btn2);
-//                }
-//            }
-//        });
 
         //홈버튼
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -409,14 +383,6 @@ public class PlayListActivity extends AppCompatActivity {
         deleteFinalState = false;
         allSeleteState = false;
 
-        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
-//        if(Main2Activity.mVoicePlayer.mIsPlaying) {
-//            imageButton.setImageResource(R.drawable.stop_btn2);
-//        }
-//        else {
-//            imageButton.setImageResource(R.drawable.play_btn2);
-//        }
-
         if (!isAfterOnPause && !Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중지 상태의 playActivity에서 넘어왔을 경우
             String[] contentNameArr = db.getAllContent();
             int playCount = db.getAllPlayListNum();
@@ -473,23 +439,6 @@ public class PlayListActivity extends AppCompatActivity {
             PlayActivity.Pactivity.finish();
         }
         finish();
-        //super.onBackPressed() 전에 setResult()를 해줘야 resultCode가 전달됨!!
-//        Intent intent = new Intent();
-//        intent.putExtra("key", playingPos);
-//        setResult(-100, intent);
-//
-//        System.out.println("여기에는 onback!!");
-//
-//        isBackPressed = true;
-//        super.onBackPressed();
-
-        //PlayActivity 호출 -> back button을 눌렀을 때는 intent에 -1을 보내서 처음부터 재생이 되도록 한다.
-        //PlayActivity 호출 -> back button을 눌렀을 때는 intent에 -100을 보내서 현재 진행중인 상태 그대로 이어나가도록 한다
-//        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
-//        intent.putExtra("playcount", -100);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
-//        startActivity(intent);
-        //finish();
     }
     /**
      * 리마인더를 목록에서 선택할 경우, 몇 개가 선택되었는지 countText라는 이름의 TextView에 띄워주는 역할을 함
@@ -670,7 +619,9 @@ public class PlayListActivity extends AppCompatActivity {
     }
 
     /**
-     * 한 자리 수의 시간일 경우 앞에 0을 붙여 Format을 일정하게 하도록 도와주는 함수
+     * 한 자리 수의 시간일 경우 앞에 0을 붙여 Format을 일정하게 하도록 도와주는 함수/**
+     * 이 클래스는 DB로부터 녹음된 파일명을 받아와 해당 파일을 재생하는 역할을 수행한다.
+     *
      */
 
     public String timeFormatFunc(String rawTime) {

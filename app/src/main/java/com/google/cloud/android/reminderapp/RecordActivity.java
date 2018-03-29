@@ -34,12 +34,10 @@ public class RecordActivity extends AppCompatActivity {
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText, mText2;
-//    ImageButton stopBtn, homeBtn;
     ImageButton stopBtn;
     ImageView recordImage;
     int value;
     String fileName;
-    //boolean isRecStartButtonClicked = false;
 
     private SpeechService mSpeechService;
 
@@ -56,8 +54,6 @@ public class RecordActivity extends AppCompatActivity {
         RActivity = this;
         db = Main2Activity.getDBInstance();
         stopBtn = (ImageButton) findViewById(R.id.stop_btn);
-//        recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
-//        homeBtn = (ImageButton) findViewById(R.id.home);
         mText = (TextView) findViewById(R.id.text);
         mText2 = (TextView) findViewById(R.id.text2);
         recordImage = (ImageView) findViewById(R.id.recordImage);
@@ -65,7 +61,6 @@ public class RecordActivity extends AppCompatActivity {
         timeAnalysis = new TimeAnalysis();
         contentAnalysis = new ContentAnalysis();
 
-       // isRecStartButtonClicked = false;
 
         //녹음 중일시
         anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
@@ -84,7 +79,7 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 value = 0;
-//                mText.setText("녹음 종료");
+
                 if(Main2Activity.mVoiceRecorder.mIsRecording) {
                     stopVoiceRecorder();
                 }
@@ -93,19 +88,9 @@ public class RecordActivity extends AppCompatActivity {
                 mText.setText("등록 중...");
                 mText2.setText("");
                 stopBtn.setEnabled(false);
-//                stopBtn.setVisibility(View.GONE);
-//                homeBtn.setVisibility(View.VISIBLE);
+
             }
         };
-
-//        recStartBtn.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                isRecStartButtonClicked = true;
-//                recStartBtn.setVisibility(View.GONE);
-//                stopBtn.setVisibility(View.VISIBLE);
-//                onStart();
-//            }
-//        });
 
         stopBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -116,25 +101,15 @@ public class RecordActivity extends AppCompatActivity {
                     mText.setText("등록 중...");
                     mText2.setText("");
                     stopBtn.setEnabled(false);
-//                    stopBtn.setVisibility(View.GONE);
-//                    homeBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-//        homeBtn.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //녹음 시작 버튼을 누르지 않았으면 시작하지 않는다.
-        //녹음 시작 버튼을 눌러야 녹음을 시작한다.
-        //if(!isRecStartButtonClicked) return;
 
         // Prepare Cloud Speech API
         bindService(new Intent(this, SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
@@ -178,18 +153,10 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
-//        if(Main2Activity.mVoiceRecorder.mIsRecording) {
-//            Main2Activity.mVoiceRecorder.stopRecording();
-//        }
-//        finish();
     }
 
 
     private void startVoiceRecorder() {
-//        if (mVoiceRecorder != null) {
-//            mVoiceRecorder.stopRecording();
-//        }
         Main2Activity.mVoiceRecorder.startRecording();
     }
 
@@ -198,7 +165,6 @@ public class RecordActivity extends AppCompatActivity {
             fileName = Main2Activity.mVoiceRecorder.stopRecording();
             FileInputStream fis = null;
             try {
-//                String fileName = db.getLastFileName();
                 fis = openFileInput(fileName);
             }
             catch (FileNotFoundException e) {

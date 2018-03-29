@@ -103,33 +103,19 @@ public class AlarmActivity extends AppCompatActivity {
 
         rBtn.setOnClickListener(new View.OnClickListener() { //R버튼을 누르면 리마인더에 해당하는 텍스트가 보여지고, 해당 파일을 재생해준다.
             public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
-//                if(Main2Activity.mVoicePlayer != null)
-//                    Main2Activity.mVoicePlayer.stopPlaying2(); //Main2Activity.mVoicePlayer.stopPlaying();
-//
-//                if(AlarmSoundService.mVoicePlayerAlarm != null) //프로그램이 종료된 상태에서 알람이 울리는 경우에 알람 처리
-//                    AlarmSoundService.mVoicePlayerAlarm.stopPlaying2(); //AlarmSoundService.mVoicePlayerAlarm.stopPlaying();
-                System.out.println("알람 액티비티 button setonclicklistener " + mVoicePlayer.mIsPlaying2);
 
-//                Intent intent = getIntent();
-//                String alarmText = intent.getStringExtra("alarmtext");
-//                String fileName = intent.getStringExtra("filename");
-//                textView.setText(alarmText);
-//                vibrator.cancel(); //진동 취소
-//                finish();
+                System.out.println("알람 액티비티 button setonclicklistener " + mVoicePlayer.mIsPlaying2);
 
                 if(mVoicePlayer.mIsPlaying2) {
                     mVoicePlayer.stopPlaying2();
                     rBtn.setImageResource(R.drawable.play_btn3);
                 }
                 else {
-//                    mVoicePlayer.playWaveFileAlarm(16000, 1024, fileName);//fileName을 받아와서 playWaveFileAlarm을 이용하면 될듯
                     mVoicePlayer.startPlaying2(16000, 1024, fileName); //*** 그냥 playWaveFileAlarm을 사용하면 안되고, 다른 Thread를 이용해야함!
                     //리스트 화면에서 알람화면으로 전환되고 나서 OutOfMemory에러가 나서, stop_btn2이미지 크기를 줄였다...!!!
                     //이 부분은 bitmap관련해서 heap메모리와 관련있는 것 같은데, 나중에 따로 공부좀 해봐야 함.
                     //일단은 임시방편으로 이미지 크기를 줄여서 넘어감...
                     rBtn.setImageResource(R.drawable.stop_btn);
-//                    textView.setText(alarmText);
                     if(vibrator != null) {
                         vibrator.cancel(); //진동 취소
                     }
@@ -166,19 +152,6 @@ public class AlarmActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
-
-        //VoicePlayer의 playWaveFileAlarm에서 알람이 1분 울리고 끝나면 stop message가 전달되고, AlarmActivity를 종료한다.
-//        ahandler = new Handler() {
-//            public void handleMessage(Message msg) {
-//                if(((String) msg.obj).equals("stop")) {
-////                    Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
-//                    System.out.println("알람 액티비티 ahandler");
-//                    vibrator.cancel(); //진동 취소
-//                    finish();
-//                }
-//            }
-//        };
-
         ahandler = new Handler() {
             public void handleMessage(Message msg) {
                 if(((String) msg.obj).equals("stop")) {
@@ -195,11 +168,6 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        Intent intent = getIntent();
-//
-//        String alarmText = intent.getStringExtra("alarmtext");
-//        System.out.println("알람텍스트 in AlarmActivity : " + alarmText);
-//        textView.setText(alarmText);
 
         Intent intent = getIntent();
         alarmText = intent.getStringExtra("alarmtext");

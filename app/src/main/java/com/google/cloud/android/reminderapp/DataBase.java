@@ -41,30 +41,6 @@ public class DataBase {
         db.insert(tableName, null, values);
     }
 
-//    //사용자 계정 저장하는 함수
-//    public void insertUserAccount(String userAccount) {
-//        db = helper.getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("userAccount", userAccount);
-//        db.insert(tableName, null, values);
-//    }
-
-//    /**
-//     * 녹음 파일의 이름을 가지고 알람 시간을 데이터베이스에 업데이트 시켜준다.
-//     * MainActivity 등에서 호출된다.
-//     *
-//     * @param fileName    알람이 생성된 시간을 가지고 있는 파일의 이름이다. yy-MM-dd hh:mm:ss. 몇 분 뒤 알람해줘 등과 같은 알람일 경우 현재 시간을 파악하기 위해 사용한다.
-//     * @param alarmTime   알람이 울릴 시간으로 String으로 저장된다.  yy:MM:dd:hh:mm의 형식으로 저장된다.
-//     * @param text 음성 입력한 text가 저장된다.
-//     */
-//    public void update (String fileName, String alarmTime, String text) {
-//        db = helper.getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("alarmTime", alarmTime);
-//        values2.put("text",text);
-//        db.update(tableName, values, "fileName=?", new String[]{fileName});
-//    }
-
     /**
      * 아직 사용되진 않았지만 후에 파일을 지울 때 사용할 예정이다.
      * file의 이름을 인자로 받아 디비에서 검색한 뒤, 일치하는 것이 있을 경우 지운다
@@ -77,21 +53,6 @@ public class DataBase {
         db.delete(tableName, "fileName=?", new String[]{fileName});
         Log.i("db1", fileName + "정상적으로 삭제 되었습니다.");
     }
-
-//    //연 월 일 시 분 초 각각 받는 함수 만들고, 일단 예비용 연도 반환 함수
-//    public int getYear(String attName)//Attribute Name
-//    {
-//        db = helper.getReadableDatabase();
-//        String SQL ="SELECT "+attName+" FROM "+tableName+";";
-//        Cursor c = db.rawQuery(SQL,null);
-//        String date="";
-//        while (c.moveToNext()) {
-//            date = c.getString(0);
-//        }
-//        String temp[] = date.split("-",1);
-//        int year = Integer.parseInt(temp[0]);
-//        return year;
-//    }//쓰면 안됨, where이 구체적으로 안잡힘
 
     /**
      *  녹음 파일을 재생할 때, 파일의 이름을 가지고 찾으므로 모든 파일의 이름을 불러오는 역할을 한다.
@@ -134,6 +95,12 @@ public class DataBase {
         return temp[num-1];
     }
 
+    /**
+     * 가장 최신 파일안의 사용자 발화 text를 받아오기 위해 이용된다.
+     *
+     * @return 가장 최신 파일안의 사용자 발화 text
+     */
+
     public String getLastText(){
         db = helper.getReadableDatabase();
         String SQL ="SELECT text FROM "+tableName+";";
@@ -147,6 +114,12 @@ public class DataBase {
         return temp[num-1];
     }
 
+    /**
+     * 가장 최신 파일안의 사용자 발화 Alarmtext를 받아오기 위해 이용된다.
+     *
+     * @return 가장 최신 파일안의 사용자 발화 Alarmtext를
+     */
+
     public String getLastAlarmText(){
         db = helper.getReadableDatabase();
         String SQL ="SELECT alarmTime FROM "+tableName+";";
@@ -159,6 +132,13 @@ public class DataBase {
         }
         return temp[num-1];
     }
+
+    /**
+     * 모든 리마인더의 알람 시간을 가져오는데 사용한다.
+     *
+     * @return 모든 알람시간 data
+     */
+
     public String[] getAllAlarmTime(){
         db = helper.getReadableDatabase();
         String SQL ="SELECT alarmTime FROM "+tableName+";";
@@ -172,6 +152,12 @@ public class DataBase {
         }
         return temp;
     }
+
+    /**
+     * 모든 리마인더의 알람 내용 가져오는데 사용한다.
+     *
+     * @return 모든 리마인더 내용
+     */
 
     public String[] getAllContent(){
         db = helper.getReadableDatabase();
@@ -187,18 +173,11 @@ public class DataBase {
         return temp;
     }
 
-//    // 사용자 계정 얻어오는 함수
-//    public String getUserAccount() {
-//        db = helper.getReadableDatabase();
-//        String SQL = "SELECT userAccount FROM " + tableName + ";";
-//        Cursor c = db.rawQuery(SQL, null);
-//        int num = c.getCount();
-//        String temp = new String();
-//        temp = c.getString(0);
-//
-//        if(num == 0) return "null";
-//        return temp;
-//    }
+    /**
+     * MainActivity에서 리마인더 갯수 등을 가져오고 싶을 경우 사용하는 메소드이다
+     *
+     * @return 모든 리마인더의 갯수
+     */
 
     public int getAllPlayListNum()
     {

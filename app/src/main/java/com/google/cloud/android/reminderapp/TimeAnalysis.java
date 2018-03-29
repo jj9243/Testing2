@@ -147,7 +147,6 @@ public class TimeAnalysis {
         //정규식 표현식에서 계산 값 추출
         extractManager(target);
 
-        //String calTime = calYear + "년 " + calMonth + "월 " + calDay + "일 " + calHour + "시 " + calMinute + "분 ";
         String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute;
         //추출한 표현값 리턴
 
@@ -160,55 +159,58 @@ public class TimeAnalysis {
         if (isNote == true)
             return "note";
 
-        // 예약하려고 하는 시간에서 15분을 빼보고 그 값이 현재 값이랑 같거나, 작으면 15분 적용하는 것을 하지 않는다.
-//
-//        int temcalMinute = calMinute;
-//        int temcalHour = calHour;
-//        int temcalDay = calDay;
-//        int temcalMonth = calMonth;
-//        int temcalYear = calYear;
-//
-//        //15분을 뺀 시간으로 구해본다.
-//        if (temcalMinute > 15) //분
-//        {
-//            temcalMinute = temcalMinute - 15;
-//        } else {
-//            temcalMinute = temcalMinute - 15 + 60;
-//            if (temcalHour > 0) //시
-//            {
-//                temcalHour = temcalHour - 1;
-//            } else {
-//                temcalHour = temcalHour - 1 + 24;
-//                if (temcalDay > 1)//일
-//                {
-//                    temcalDay = temcalDay - 1;
-//                } else {
-//                    temcalDay = temcalDay - 1 + days[temcalMonth];
-//                    if (temcalMonth > 1) //월
-//                    {
-//                        temcalMonth = temcalMonth - 1;
-//                    } else {
-//                        temcalMonth = temcalMonth - 1 + 12;
-//                        temcalYear = temcalYear - 1;
-//                    }
-//                }
-//            }
-//        }
+        /* 예약하려고 하는 시간에서 15분을 빼보고 그 값이 현재 값이랑 같거나, 작으면 15분 적용하는 것을 하지 않는다.
+            이전에는 예약보다 무조건 15분 앞당겨서 저장했는데, 사용자께서 이것이 상황에 맞지 않게 15분 빨리 항상 울리므로 불편하다고 하셨다.
+            혹시 필요할 수도 있으니 남겨둔다.
 
-//        System.out.println("extract result3:" + temcalTime);
-//        System.out.println("extract result3:" + curTime);
+        int temcalMinute = calMinute;
+        int temcalHour = calHour;
+        int temcalDay = calDay;
+        int temcalMonth = calMonth;
+        int temcalYear = calYear;
 
-//        //분으로 환산하기
-//        long temValueMinute = (temcalYear * 15768000) + (temcalMonth * 43200) + (temcalDay  * 1440) + (temcalHour * 60) + temcalMinute;
-//        long valueMinute = (curYear * 15768000) + (curMonth * 43200) + (curDay  * 1440) + (curHour * 60) + curMinute;
-//
-//        //15분 뺀 값이 과거의 값이 아니면
-//        if(temValueMinute > valueMinute)
-//        {
-//            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute;
-//            return temcalTime;
-//        }
-//        System.out.println("extract result2:" + calTime);
+        //15분을 뺀 시간으로 구해본다.
+        if (temcalMinute > 15) //분
+        {
+            temcalMinute = temcalMinute - 15;
+        } else {
+            temcalMinute = temcalMinute - 15 + 60;
+            if (temcalHour > 0) //시
+            {
+                temcalHour = temcalHour - 1;
+            } else {
+                temcalHour = temcalHour - 1 + 24;
+                if (temcalDay > 1)//일
+                {
+                    temcalDay = temcalDay - 1;
+                } else {
+                    temcalDay = temcalDay - 1 + days[temcalMonth];
+                    if (temcalMonth > 1) //월
+                    {
+                        temcalMonth = temcalMonth - 1;
+                    } else {
+                        temcalMonth = temcalMonth - 1 + 12;
+                        temcalYear = temcalYear - 1;
+                    }
+                }
+            }
+        }
+
+        System.out.println("extract result3:" + temcalTime);
+        System.out.println("extract result3:" + curTime);
+
+        //분으로 환산하기
+        long temValueMinute = (temcalYear * 15768000) + (temcalMonth * 43200) + (temcalDay  * 1440) + (temcalHour * 60) + temcalMinute;
+        long valueMinute = (curYear * 15768000) + (curMonth * 43200) + (curDay  * 1440) + (curHour * 60) + curMinute;
+
+        //15분 뺀 값이 과거의 값이 아니면
+        if(temValueMinute > valueMinute)
+        {
+            String temcalTime = temcalYear + ":" + temcalMonth + ":" + temcalDay + ":" + temcalHour + ":" + temcalMinute;
+            return temcalTime;
+        }
+        System.out.println("extract result2:" + calTime);
+*/
         //과거의 값이라면
         calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute;
         return calTime;
@@ -320,7 +322,6 @@ public class TimeAnalysis {
             if (extract28(searchTarget, regex)) break;
 
             regex = "(1?[0-9]) ?월 ?([1-3]?[0-9]) ?일 ?(오 ?전|오 ?후)? ?([1-2]?[0-9]) ?시"; // 7월 5일 오전/오후 1시
-            //regex = "(1?[0-9]) ?월 ?([1-3]?[0-9]) ?일 ?([1-2]?[0-9]) ?시";
             if (extract25(searchTarget, regex)) break;
 
             regex = "(1?[0-9]) ?월 ?([1-3]?[0-9]) ?일"; // 7월 4일
@@ -444,8 +445,6 @@ public class TimeAnalysis {
             isExtracted = true;
 
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("월|일|시|분");
@@ -489,8 +488,6 @@ public class TimeAnalysis {
             isNextDay = true;
             isExtracted = true;
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("월|일|시");
@@ -535,8 +532,6 @@ public class TimeAnalysis {
             isExtracted = true;
 
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("일|시|분");
@@ -581,8 +576,6 @@ public class TimeAnalysis {
             isExtracted = true;
 
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("일|시");
@@ -627,8 +620,6 @@ public class TimeAnalysis {
             isExtracted = true;
 
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("월|일|시");
@@ -673,8 +664,6 @@ public class TimeAnalysis {
             isNextDay = true;
             isExtracted = true;
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.replaceAll(" ", "").split("일|시");
@@ -1276,15 +1265,21 @@ public class TimeAnalysis {
 
                 System.out.println("extract Month : " + calMonth);
             }
-        } else { //오전, 오후가 입력되지 않았다면, working time(8am - 8pm, 8 - 20) 범위내에서 처리
-//            System.out.println("extract200");
-//            if (calHour < 12) { //12이상이면 오후로 정해진 것. 1 ~ 11은 오전/오후 둘 다 가능
-//                calA = "오전";
-//                if (calHour < 8) { //0 ~ 7
-//                    calHour += 12;
-//                    calA = "오후";
-//                }
-//            }
+        } else {
+            /*
+            * 이전에는 Working Time이라는 것을 두어 오전/오후가 입력되지 않았다면 아래와 같이 처리했으나
+            * 이를 새로운 방식 (사용자에게 되묻는 방식)으로 변경하려고 하였기에 주석처리 했다.
+            * 이를 다시 기존의 Working Time방식으로 남겨둘 수 있기 때문에 지우지 않았다.
+            오전, 오후가 입력되지 않았다면, working time(8am - 8pm, 8 - 20) 범위내에서 처리
+            System.out.println("extract200");
+            if (calHour < 12) { //12이상이면 오후로 정해진 것. 1 ~ 11은 오전/오후 둘 다 가능
+                calA = "오전";
+                if (calHour < 8) { //0 ~ 7
+                    calHour += 12;
+                    calA = "오후";
+                }
+            }
+            */
             isNote = true;
 
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay && (calYear * 365 + calMonth * 30 + calDay) <= (curYear * 365 + curMonth * 30 + curDay)) {
@@ -1515,9 +1510,7 @@ public class TimeAnalysis {
             regex = "오전|오후";
             extract101(searchTarget, regex);
 
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
 
@@ -1571,13 +1564,10 @@ public class TimeAnalysis {
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
             //TODO 오류 수정 바람
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1634,13 +1624,10 @@ public class TimeAnalysis {
 
             System.out.println("extract wmap : " + wMap.get(curDayOfWeek) + " " + wMap.get(dayofweek) + " " + curHour + " " + calHour);
 
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1688,14 +1675,11 @@ public class TimeAnalysis {
             temp = result.split("시|분");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
 
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
 
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1744,14 +1728,11 @@ public class TimeAnalysis {
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
 
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1798,14 +1779,11 @@ public class TimeAnalysis {
             temp = result.split("시");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
-            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
 
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }

@@ -102,21 +102,10 @@ public class AlarmSoundService extends Service {
             }
 
             protected String doInBackground(String ... values) {
-//                if(Main2Activity.mVoicePlayer != null) {
-//                    Main2Activity.mVoicePlayer.playWaveFileAlarm(16000, 1024, values[0]);
-//                }
-//                else { //프로그램이 종료됐을 때도 알람이 울리도록 하기 위함
-//                    //내부저장소에 접근할 때, 꼭 Main의 context를 사용하지 않아도 접근이 가능하구나
-//                    mVoicePlayerAlarm = new VoicePlayer(getApplicationContext());
-//                    mVoicePlayerAlarm.playWaveFileAlarm(16000, 1024, values[0]);
-//                }
-//                publishProgress(values[0]);
                 return values[0];
             }
 
             protected void onProgressUpdate(String values) {
-//                Toast.makeText(getApplicationContext(), "알람이 울립니다. ", Toast.LENGTH_LONG).show();
-//                MainActivity.device.callOnClick();
             }
 
             protected void onPostExecute(String result) {
@@ -131,7 +120,6 @@ public class AlarmSoundService extends Service {
         task.execute(temp);
 
         return START_NOT_STICKY;
-        //return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

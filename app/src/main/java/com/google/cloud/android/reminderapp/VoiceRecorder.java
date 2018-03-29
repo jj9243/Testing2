@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Continuously records audio and notifies the {@link VoiceRecorder.Callback} when voice (or any
+ * Continuously records audio and notifies the } when voice (or any
  * sound) is heard.
  *
  * <p>The recorded audio format is always {@link AudioFormat#ENCODING_PCM_16BIT} and
@@ -32,8 +32,6 @@ public class VoiceRecorder {
     private short mAudioFormat;
     private short mChannelConfig;
 
-//   private final Callback mCallback;
-//
     private AudioRecord mRecorder = null;
     private Thread mRecordingThread = null;
     boolean mIsRecording = false;
@@ -46,10 +44,9 @@ public class VoiceRecorder {
      * 디비와 레코딩 설정 등 Context가 필요한 부분을 위해 context를 Main으로 부터 받아오고
      * 디비 변수를 Main으로 부터 받아온다.
      */
-    public VoiceRecorder(Context c, @NonNull Callback callback)
+    public VoiceRecorder(Context c)
     {
         context =c;
-//        mCallback = callback;
         db = Main2Activity.getDBInstance();
     }
 
@@ -73,29 +70,7 @@ public class VoiceRecorder {
         mRecordingThread.start();
     }
 
-    public static abstract class Callback {
-//
-//        /**
-//         * Called when the recorder starts hearing voice.
-//         */
-//        public void onVoiceStart() {
-//        }
-//
-//        /**
-//         * Called when the recorder is hearing voice.
-//         *
-//         * @param data The audio data in {@link AudioFormat#ENCODING_PCM_16BIT}.
-//         * @param size The size of the actual data in {@code data}.
-//         */
-//        public void onVoice(byte[] data, int size) {
-//        }
-//
-//        /**
-//         * Called when the recorder stops hearing voice.
-//         */
-//        public void onVoiceEnd() {
-//        }
-    }
+
 
     /**
      * 샘플 레이트, 버퍼의 크기, 오디오의 포맷, 채널 그리고 오디오 레코드 객체를 세팅하기 위해 불려진다.
@@ -158,25 +133,26 @@ public class VoiceRecorder {
             fos = context.openFileOutput(fileName,context.MODE_PRIVATE);
             while (mIsRecording) {
                 int size = mRecorder.read(sData, 0, mBufferSize); //7월 18일 commit에서 빠져서 녹음이 안됐음. 다시 추가.
-//                //**********************볼륨 증폭 코드**************************//
-//                //참조 : http://steveyoon77.tistory.com/303
-////                short level = 148; //0 ~ 148 (79가 증폭이 없는 수준, *1한 수준임)
-////                float multiplier = (float)Math.tan(level / 100.0);
-//                for(int ctr = 0; ctr < size; ctr++) {
-////                    int pcmval = (int) (sData[ctr] * multiplier);
-//                    int pcmval = sData[ctr] * 10; //이거로 해보자
-//                    if(pcmval < 32767 && pcmval > -32768) {
-//                        sData[ctr] = (short)(0.5f + pcmval);
-//                    }
-//                    else if(pcmval > 32767) {
-//                        sData[ctr] = 32767;
-//                    }
-//                    else if(pcmval < -32768) {
-//                        sData[ctr] = -32768;
-//                    }
-//                }
-//                //*******************************************************************//
-//                NoiseSuppressor.create(mRecorder.getAudioSessionId());
+
+                /* 볼륨 증폭 코드
+                초기에 볼륨이 많이 작았던 경우가 있었음. 혹시 이런 상황이 재발생할 수 있기 때문에 코드를 남겨둠.
+                //참조 : http://steveyoon77.tistory.com/303
+//                short level = 148; //0 ~ 148 (79가 증폭이 없는 수준, *1한 수준임)
+//                float multiplier = (float)Math.tan(level / 100.0);
+                for(int ctr = 0; ctr < size; ctr++) {
+                    int pcmval = sData[ctr] * 10; //이거로 해보자
+                    if(pcmval < 32767 && pcmval > -32768) {
+                        sData[ctr] = (short)(0.5f + pcmval);
+                    }
+                    else if(pcmval > 32767) {
+                        sData[ctr] = 32767;
+                    }
+                    else if(pcmval < -32768) {
+                        sData[ctr] = -32768;
+                    }
+                }
+                */
+                NoiseSuppressor.create(mRecorder.getAudioSessionId());
 
                 byte bData[] = short2byte(sData);
                 fos.write(bData, 0, mBufferSize * mBytesPerElement);
